@@ -16,6 +16,9 @@
 		></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.0"></script>
 	</head>
 
 	<body>
@@ -27,6 +30,8 @@
 			</select>
 			<div id="my_dataviz" style="margin-top: 100px"></div>
 		</div>
+
+		<div style="margin-left: 100px;" id="vis"/>
 	</body>
 	<script>
 		var global_var = {
@@ -167,5 +172,24 @@
 					.on("click", mouseclick);
 			});
 		}
+
+		 const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "country",
+  "width": 800,
+  "height": 400,
+  "data": {"url": "https://api.npoint.io/4386a84d1bfce92e7077"},
+  "mark": "area",
+  "transform": [
+    {"density": "release_year", "groupby": ["country"], "extent": [2009, 2021]}
+  ],
+  "encoding": {
+    "x": {"field": "value", "type": "quantitative", "title": "release_year"},
+    "y": {"field": "density", "type": "quantitative", "stack": "zero"},
+    "color": {"field": "country", "type": "nominal"}
+  },
+  "config": {}
+};
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
 	</script>
 </html>
