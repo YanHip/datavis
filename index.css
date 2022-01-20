@@ -1,0 +1,29 @@
+.form-group {
+	width: 20%;
+}
+
+.params_div {
+	border: 1px solid #5c5c5c;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+header {
+	text-align: center;
+	color: #5c5c5c;
+	padding-top: 1%;
+}
+
+#my_dataviz {
+	padding: 1%;
+}
+
+.visu_div {
+	padding: 1%;
+}
+
+@media screen and (max-width: 1250px) {
+	.visu_div {
+		overflow-x: scroll;
+	}
+}
