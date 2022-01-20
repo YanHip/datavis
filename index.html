@@ -49,10 +49,14 @@
 		var global_var = {
 			url: "./csvNetflixData.csv",
 		};
+		document.getElementById("select_visu").onchange = function (e) {
+			main(e.target.value);
+		};
 		main(2);
 
 		function main(type_of_visu) {
 			document.getElementById("my_dataviz").innerHTML = "";
+			document.getElementById("my_dataviz2").innerHTML = "";
 
 			// graph1
 			var margin = { top: 10, right: 30, bottom: 30, left: 60 },
