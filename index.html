@@ -108,16 +108,28 @@
 					.style("padding", "10px");
 
 				var mouseover = function (d) {
+					let text = "";
+					if(d.type == "Movie") {
+						text += "Le film ";
+					} else if (d.type == "TV Show") {
+						text += "La série ";
+					}
 					tooltip
-						.html("Le film " + d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
+						.html(text + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + 90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
 						.style("top", d3.mouse(this)[1] + "px");
 					tooltip.style("opacity", 1);
 				};
 
 				var mousemove = function (d) {
+					let text = "";
+					if(d.type == "Movie") {
+						text += "Le film ";
+					} else if (d.type == "TV Show") {
+						text += "La série ";
+					}
 					tooltip
-						.html("Le film " + d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
+						.html(text + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + 90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
 						.style("top", d3.mouse(this)[1] + "px");
 					tooltip.style("opacity", 1);
@@ -132,7 +144,6 @@
 					window.open(url, "_blank");
 				};
 
-				let unity_of_duration = [];
 				svg
 					.append("g")
 					.selectAll("dot")
@@ -142,7 +153,6 @@
 					.attr("cx", function (d) {
 						if (d.imdb_rating != "" && d.imdb_rating != null) {
 							let duree = d.duration.split(" ");
-							if (!unity_of_duration.includes(d.type)) unity_of_duration.push(d.type);
 							if (type_of_visu == 0 && d.type == "Movie") {
 								return x(duree[0]);
 							} else if (type_of_visu == 1 && d.type == "TV Show") {
