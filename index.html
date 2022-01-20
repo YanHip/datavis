@@ -24,7 +24,14 @@
 	</header>
 
 	<body>
+
+
 		<div class="container-sm params_div">
+			<div style="margin-bottom: 50px; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+				<h3>Télécharger les données au format csv</h3>  
+				<a href="./csvNetflixData.csv" download="NetflixData">Télécharger</a>
+			</div>
+
 			<div class="form-group">
 				<label for="select_visu">Choix du type de visuel:</label>
 				<select class="form-control" id="select_visu">
@@ -45,13 +52,11 @@
 
 
 	<script>
+
 		var global_var = {
 			url: "./csvNetflixData.csv",
 		};
 
-		document.getElementById("select_visu").onchange = function (e) {
-			main(e.target.value);
-		};
 
 		main(2);
 
