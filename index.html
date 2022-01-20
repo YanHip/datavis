@@ -86,7 +86,7 @@
 				if (type_of_visu == 1) {
 					nbXAxe = 20;
 				}
-				
+
 				var x = d3.scaleLinear().domain([0, nbXAxe]).range([0, width]);
 				svg
 					.append("g")
@@ -147,7 +147,7 @@
 					tooltip
 						.html(text + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top",  height + d3.mouse(this)[1]  - 200 + "px");
+						.style("top", height + d3.mouse(this)[1] - 200 + "px");
 					tooltip.style("opacity", 1);
 				};
 
@@ -225,6 +225,7 @@
 					};
 					arrayFinal.push(object);
 				});
+				arrayFinal.sort((a, b) => a.occ - b.occ);
 
 				// X axis
 				var x2 = d3
@@ -272,7 +273,7 @@
 					tooltip2
 						.html("Il y a " + d.occ + "films et séries pour" + d.genre + ".")
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top", height2 + d3.mouse(this)[1]  + 350 + "px");
+						.style("top", height2 + d3.mouse(this)[1] + 350 + "px");
 					tooltip2.style("opacity", 1);
 				};
 
@@ -281,7 +282,7 @@
 					tooltip2
 						.html("Il y a <b>" + d.occ + " </b>films et séries pour<b> " + d.genre + "</b>.")
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top",  height2 + d3.mouse(this)[1]  + 350  + "px");
+						.style("top", height2 + d3.mouse(this)[1] + 350 + "px");
 					tooltip2.style("opacity", 1);
 				};
 
@@ -322,6 +323,5 @@
 			});
 			return count;
 		}
-
 	</script>
 </html>
