@@ -20,13 +20,17 @@
 	</head>
 
 	<header>
-		<h2>Visualisation de données sur les films et séries présentent sur Netflix</h2>
+		<h1>Visualisation des données sur les films et séries présentent sur Netflix</h1>
+		<div>
+			<p>par <b>HIPPLER Yann, PAN Julien, DEME Moussa, KHAR</b></p>
+		</div>
 	</header>
 
 	<body>
+
 		<div class="container-sm params_div">
 			<div style="margin-bottom: 50px; display: flex; justify-content: center; flex-direction: column; align-items: center">
-				<h3>Télécharger les données au format csv</h3>
+				<h3>Télécharger les données au format csv (<a target="_blank" href="https://www.kaggle.com/shivamb/netflix-shows">source</a>)</h3>
 				<a href="./csvNetflixData.csv" download="NetflixData">Télécharger</a>
 			</div>
 
@@ -40,7 +44,15 @@
 			</div>
 		</div>
 		<div class="container-sm visu_div">
+			<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+				<h3>Les films et séries les mieux notés en fonction de leur durée totale</h3>
+			</div>
 			<div id="my_dataviz"></div>
+
+			<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+				<h3>Les genres de films et séries les plus produitent</h3>
+			</div>
+
 			<div id="my_dataviz2"></div>
 		</div>
 	</body>
