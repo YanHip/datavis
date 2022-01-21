@@ -20,54 +20,86 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.0"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.0"></script>
 	</head>
 
 	<header>
 		<h1>Visualisation des données sur les films et séries présentent sur Netflix</h1>
 		<div>
-			<p>par <b>HIPPLER Yann, PAN Julien, DEME Moussa, KHAR</b></p>
+			<p>par <b>HIPPLER Yann, PAN Julien, DEME Moussa, KHAR Diop Mame </b></p>
 		</div>
 	</header>
 
 	<body>
-
 		<div class="container-sm params_div">
 			<div style="margin-bottom: 50px; display: flex; justify-content: center; flex-direction: column; align-items: center">
 				<h3>Télécharger les données au format csv (<a target="_blank" href="https://www.kaggle.com/shivamb/netflix-shows">source</a>)</h3>
 				<a href="./csvNetflixData.csv" download="NetflixData">Télécharger</a>
 			</div>
-
-			<div class="form-group">
-				<label for="select_visu">Choix du type de visuel:</label>
-				<select class="form-control" id="select_visu">
-					<option value="2">Les 2</option>
-					<option value="0">Film</option>
-					<option value="1">Série</option>
-				</select>
-			</div>
 		</div>
 		<div class="container-sm visu_div">
-			<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
-				<h3>Les films et séries les mieux notés en fonction de leur durée totale</h3>
+			<div class="onglets">
+				<div class="onglet" id="v_quant">Visualisation quantitative</div>
+				<div class="onglet" id="v_catetquant">Visualisation combinant catégories et quantités</div>
+				<div class="onglet" id="v_nonstruct">
+					Visualisation de données <br />
+					non-structurées
+				</div>
+				<div class="onglet" id="v_4">Test</div>
 			</div>
-			<div id="my_dataviz"></div>
-
-			<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
-				<h3>Les genres de films et séries les plus produitent</h3>
+			<div class="graphs" id="graph1" style="display: block">
+				<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+					<h3>Les films et séries les mieux notés en fonction de leur durée totale</h3>
+				</div>
+				<div class="form-group">
+					<label for="select_visu">Choix du type de visuel:</label>
+					<select class="form-control" id="select_visu">
+						<option value="2">Les 2</option>
+						<option value="0">Film</option>
+						<option value="1">Série</option>
+					</select>
+				</div>
+				<div id="my_dataviz"></div>
 			</div>
 
-			<div id="my_dataviz2"></div>
-
-			<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px; padding-bottom: 20px;">
-				<h3>La densité des films suivant l'année par pays</h3>
+			<div class="graphs" id="graph2">
+				<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+					<h3>Les genres de films et séries les plus produitent</h3>
+				</div>
+				<div id="my_dataviz2"></div>
 			</div>
 
-			<div id="vis"/>
+			<div class="graphs" id="graph3">
+				<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px; padding-bottom: 20px">
+					<h3>La densité des films suivant l'année par pays</h3>
+				</div>
+
+				<div id="my_dataviz3"></div>
+			</div>
+
+			<div class="graphs" id="graph4">
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+						<h3>Test Visualisation Treemap</h3>
+					</div>
+					<div id="my_dataviz4"></div>
+					<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+						<h3>Test Visualisation Image</h3>
+					</div>
+					<img src="./graph_image.jpeg" style="width: 30%" />
+					<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
+						<h3>Test Visualisation RawGraph</h3>
+					</div>
+					<div style="overflow: scroll; height: 500px; width: 100%;">
+						<object
+						data="treemaprawgraph.svg"
+						width="5000px"
+						height="2000px"
+						></object>
+					</div>
+				</div>
+			</div>
 		</div>
-
-
-		
 	</body>
 
 	<script>
@@ -77,6 +109,40 @@
 		document.getElementById("select_visu").onchange = function (e) {
 			main(e.target.value);
 		};
+
+		// document.getElementById("select_graph")
+		let active = "v_quant";
+		function setOnglet() {
+			let onglet = document.getElementsByClassName("onglet");
+			if (onglet != null && onglet.length > 0) {
+				for (let ia = 0; ia < onglet.length; ia++) {
+					if (active != onglet[ia].id) onglet[ia].style.backgroundColor = "#ffffff";
+					else if (active == onglet[ia].id) onglet[ia].style.backgroundColor = "#b6b4b4";
+					onglet[ia].onclick = function (e) {
+						active = onglet[ia].id;
+						let graphs = document.getElementsByClassName("graphs");
+						if (graphs != null && graphs.length > 0) {
+							for (let ib = 0; ib < graphs.length; ib++) {
+								graphs[ib].style.display = "none";
+								if (active == "v_quant") {
+									if (graphs[ib].id == "graph1") graphs[ib].style.display = "block";
+								} else if (active == "v_catetquant") {
+									if (graphs[ib].id == "graph2") graphs[ib].style.display = "block";
+								} else if (active == "v_nonstruct") {
+									if (graphs[ib].id == "graph3") graphs[ib].style.display = "block";
+								} else if (active == "v_4") {
+									if (graphs[ib].id == "graph4") {
+										graphs[ib].style.display = "block";
+									}
+								}
+							}
+						}
+						setOnglet();
+					};
+				}
+			}
+		}
+		setOnglet();
 		main(2);
 
 		function main(type_of_visu) {
@@ -107,6 +173,19 @@
 				.attr("height", height2 + margin2.top + margin2.bottom)
 				.append("g")
 				.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+			//graph4
+			var margin3 = { top: 10, right: 10, bottom: 10, left: 10 },
+				width3 = 1200 - margin3.left - margin3.right,
+				height3 = 450 - margin3.top - margin3.bottom;
+
+			var svg3 = d3
+				.select("#my_dataviz4")
+				.append("svg")
+				.attr("width", width3 + margin3.left + margin3.right)
+				.attr("height", height3 + margin3.top + margin3.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
 
 			//Read the data
 			d3.csv(global_var.url, function (data) {
@@ -162,7 +241,7 @@
 					tooltip
 						.html(text + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top", height + d3.mouse(this)[1] - 20 + "px");
+						.style("top", height + d3.mouse(this)[1] - 100 + "px");
 					tooltip.style("opacity", 1);
 				};
 
@@ -176,7 +255,7 @@
 					tooltip
 						.html(text + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top", height + d3.mouse(this)[1] - 200 + "px");
+						.style("top", height + d3.mouse(this)[1] - 100 + "px");
 					tooltip.style("opacity", 1);
 				};
 
@@ -302,16 +381,15 @@
 					tooltip2
 						.html("Il y a " + d.occ + "films et séries pour" + d.genre + ".")
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top", height2 + d3.mouse(this)[1] + 350 + "px");
+						.style("top", height2 + d3.mouse(this)[1] + "px");
 					tooltip2.style("opacity", 1);
 				};
 
 				var mousemove2 = function (d) {
-					console.log(d3.mouse(this));
 					tooltip2
 						.html("Il y a <b>" + d.occ + " </b>films et séries pour<b> " + d.genre + "</b>.")
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-						.style("top", height2 + d3.mouse(this)[1] + 350 + "px");
+						.style("top", height2 + d3.mouse(this)[1] + "px");
 					tooltip2.style("opacity", 1);
 				};
 
@@ -338,7 +416,77 @@
 					.attr("fill", "#69b3a2")
 					.on("mousemove", mousemove2)
 					.on("mouseover", mouseover2)
-					.on("mouseover", mouseclick2);
+					.on("click", mouseclick2);
+
+				//graph4
+				let years = [];
+				for (let ia = 0; ia < data.length; ia++) {
+					if (!years.includes(data[ia].release_year)) years.push(data[ia].release_year);
+				}
+				years.sort((a, b) => a - b);
+				for (let ib = 0; ib < years.length; ib++) {
+					let tmp_years = years[ib];
+					years[ib] = { name: tmp_years, parent: "Origin", value: 0 };
+					for (let ic = 0; ic < data.length; ic++) {
+						if (data[ic].release_year == tmp_years) years[ib].value++;
+					}
+				}
+				years.unshift({ name: "Origin", parent: "", value: "" });
+
+				var root = d3
+					.stratify()
+					.id(function (d) {
+						return d.name;
+					})
+					.parentId(function (d) {
+						return d.parent;
+					})(years);
+				root.sum(function (d) {
+					return +d.value;
+				}); // Compute the numeric value for each entity
+
+				// Then d3.treemap computes the position of each element of the hierarchy
+				// The coordinates are added to the root object above
+				d3.treemap().size([width3, height3]).padding(4)(root);
+
+				// use this information to add rectangles:
+				svg3
+					.selectAll("rect")
+					.data(root.leaves())
+					.enter()
+					.append("rect")
+					.attr("x", function (d) {
+						return d.x0;
+					})
+					.attr("y", function (d) {
+						return d.y0;
+					})
+					.attr("width", function (d) {
+						return d.x1 - d.x0;
+					})
+					.attr("height", function (d) {
+						return d.y1 - d.y0;
+					})
+					.style("stroke", "black")
+					.style("fill", "#69b3a2");
+
+				// and to add the text labels
+				svg3
+					.selectAll("text")
+					.data(root.leaves())
+					.enter()
+					.append("text")
+					.attr("x", function (d) {
+						return d.x0 + 10;
+					}) // +10 to adjust position (more right)
+					.attr("y", function (d) {
+						return d.y0 + 20;
+					}) // +20 to adjust position (lower)
+					.text(function (d) {
+						return d.data.name;
+					})
+					.attr("font-size", "15px")
+					.attr("fill", "white");
 			});
 		}
 
@@ -355,22 +503,20 @@
 
 		// country graph
 		const spec = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "",
-  "width": 800,
-  "height": 400,
-  "data": {"url": "https://api.npoint.io/4386a84d1bfce92e7077"},
-  "mark": "area",
-  "transform": [
-    {"density": "release_year", "groupby": ["country"], "extent": [2009, 2021]}
-  ],
-  "encoding": {
-    "x": {"field": "value", "type": "quantitative", "title": "release_year"},
-    "y": {"field": "density", "type": "quantitative", "stack": "zero"},
-    "color": {"field": "country", "type": "nominal"}
-  },
-  "config": {}
-};
-    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+			$schema: "https://vega.github.io/schema/vega-lite/v5.json",
+			title: "",
+			width: 800,
+			height: 400,
+			data: { url: "https://api.npoint.io/4386a84d1bfce92e7077" },
+			mark: "area",
+			transform: [{ density: "release_year", groupby: ["country"], extent: [2009, 2021] }],
+			encoding: {
+				x: { field: "value", type: "quantitative", title: "release_year" },
+				y: { field: "density", type: "quantitative", stack: "zero" },
+				color: { field: "country", type: "nominal" },
+			},
+			config: {},
+		};
+		vegaEmbed("#my_dataviz3", spec, { mode: "vega-lite" }).then(console.log).catch(console.warn);
 	</script>
 </html>

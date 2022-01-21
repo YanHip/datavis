@@ -21,6 +21,25 @@ header {
 .visu_div {
 	padding: 1%;
 }
+.onglets {
+	display: flex;
+}
+.onglet {
+	border-top: 1px solid #5c5c5c;
+	border-right: 1px solid #5c5c5c;
+	border-left: 1px solid #5c5c5c;
+	cursor: pointer;
+	border-radius: 5px 5px 0px 0px;
+	height: 50px;
+	width: 250px;
+	margin-right: 5px;
+	padding: 3px;
+	text-align: center;
+}
+.graphs {
+	display: none;
+	width:100%;
+}
 
 @media screen and (max-width: 1250px) {
 	.visu_div {
