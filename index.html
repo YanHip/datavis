@@ -47,17 +47,25 @@
 				</div>
 				<div class="onglet" id="v_4">Test</div>
 			</div>
-			<div class="graphs" id="graph1" style="display: block">
+			<div class="graphs" id="graph1" style="display: block;">
 				<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
 					<h3>Les films et séries les mieux notés en fonction de leur durée totale</h3>
 				</div>
-				<div class="form-group">
-					<label for="select_visu">Choix du type de visuel:</label>
-					<select class="form-control" id="select_visu">
-						<option value="2">Les 2</option>
-						<option value="0">Film</option>
-						<option value="1">Série</option>
-					</select>
+				<div class="form-group" style="display: flex; flex-direction: row">
+					<div style="width: 100%">
+						<label for="select_visu">Choix du type de visuel:</label>
+						<select class="form-control" id="select_visu">
+							<option value="2">Les 2</option>
+							<option value="0">Film</option>
+							<option value="1">Série</option>
+						</select>
+					</div>
+					<div style="width: 100%">
+						<label for="select_annee">Choix de l'année:</label>
+						<select class="form-control" id="select_annee">
+							<option value="0">Toutes</option>
+						</select>
+					</div>
 				</div>
 				<div id="my_dataviz"></div>
 			</div>
@@ -78,7 +86,7 @@
 			</div>
 
 			<div class="graphs" id="graph4">
-				<div style="display: flex; flex-direction: column; align-items: center;">
+				<div style="display: flex; flex-direction: column; align-items: center">
 					<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
 						<h3>Test Visualisation Treemap</h3>
 					</div>
@@ -90,12 +98,8 @@
 					<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px">
 						<h3>Test Visualisation RawGraph</h3>
 					</div>
-					<div style="overflow: scroll; height: 500px; width: 100%;">
-						<object
-						data="treemaprawgraph.svg"
-						width="5000px"
-						height="2000px"
-						></object>
+					<div style="overflow: scroll; height: 500px; width: 100%">
+						<object data="treemaprawgraph.svg" width="5000px" height="2000px"></object>
 					</div>
 				</div>
 			</div>
@@ -112,6 +116,8 @@
 
 		// document.getElementById("select_graph")
 		let active = "v_quant";
+		var active_date = "0";
+
 		function setOnglet() {
 			let onglet = document.getElementsByClassName("onglet");
 			if (onglet != null && onglet.length > 0) {
@@ -143,6 +149,7 @@
 			}
 		}
 		setOnglet();
+		var select = document.getElementById("select_annee");
 		main(2);
 
 		function main(type_of_visu) {
@@ -268,6 +275,31 @@
 					window.open(url, "_blank");
 				};
 
+				var years = [];
+				for (let ia = 0; ia < data.length; ia++) {
+					if (!years.includes(data[ia].release_year)) years.push(data[ia].release_year);
+				}
+				years.sort((a, b) => b - a);
+				for (let ia = 0; ia < years.length; ia++) {
+					var opt = document.createElement("option");
+					opt.value = years[ia];
+					opt.innerHTML = years[ia];
+					select.appendChild(opt);
+				}
+				select.onchange = function (e) {
+					active_date = e.target.value;
+					main(type_of_visu);
+				};
+				years.sort((a, b) => a - b);
+				for (let ib = 0; ib < years.length; ib++) {
+					let tmp_years = years[ib];
+					years[ib] = { name: tmp_years, parent: "Origin", value: 0 };
+					for (let ic = 0; ic < data.length; ic++) {
+						if (data[ic].release_year == tmp_years) years[ib].value++;
+					}
+				}
+				years.unshift({ name: "Origin", parent: "", value: "" });
+
 				svg
 					.append("g")
 					.selectAll("dot")
@@ -289,11 +321,29 @@
 					.attr("cy", function (d) {
 						if (d.imdb_rating != "" && d.imdb_rating != null) {
 							if (type_of_visu == 0 && d.type == "Movie") {
-								return y(d.imdb_rating);
+								if (active_date != "0" && active_date == d.release_year) {
+									return y(d.imdb_rating);
+								} else if (active_date == "0") {
+									return y(d.imdb_rating);
+								} else {
+									return y(-1000);
+								}
 							} else if (type_of_visu == 1 && d.type == "TV Show") {
-								return y(d.imdb_rating);
+								if (active_date != "0" && active_date == d.release_year) {
+									return y(d.imdb_rating);
+								} else if (active_date == "0") {
+									return y(d.imdb_rating);
+								} else {
+									return y(-1000);
+								}
 							} else if (type_of_visu == 2) {
-								return y(d.imdb_rating);
+								if (active_date != "0" && active_date == d.release_year) {
+									return y(d.imdb_rating);
+								} else if (active_date == "0") {
+									return y(d.imdb_rating);
+								} else {
+									return y(-1000);
+								}
 							} else {
 								return y(-1000);
 							}
@@ -419,19 +469,6 @@
 					.on("click", mouseclick2);
 
 				//graph4
-				let years = [];
-				for (let ia = 0; ia < data.length; ia++) {
-					if (!years.includes(data[ia].release_year)) years.push(data[ia].release_year);
-				}
-				years.sort((a, b) => a - b);
-				for (let ib = 0; ib < years.length; ib++) {
-					let tmp_years = years[ib];
-					years[ib] = { name: tmp_years, parent: "Origin", value: 0 };
-					for (let ic = 0; ic < data.length; ic++) {
-						if (data[ic].release_year == tmp_years) years[ib].value++;
-					}
-				}
-				years.unshift({ name: "Origin", parent: "", value: "" });
 
 				var root = d3
 					.stratify()
