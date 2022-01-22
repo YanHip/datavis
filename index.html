@@ -75,14 +75,14 @@
 					<h3>Les genres de films et séries les plus produitent</h3>
 				</div>
 				<div id="my_dataviz2"></div>
-			</div>
-
-			<div class="graphs" id="graph3">
 				<div style="width: 100%; display: flex; justify-content: center; margin-top: 30px; padding-bottom: 20px">
 					<h3>La densité des films suivant l'année par pays</h3>
 				</div>
-
 				<div id="my_dataviz3"></div>
+			</div>
+
+			<div class="graphs" id="graph3">
+
 			</div>
 
 			<div class="graphs" id="graph4">
@@ -155,6 +155,7 @@
 		function main(type_of_visu) {
 			document.getElementById("my_dataviz").innerHTML = "";
 			document.getElementById("my_dataviz2").innerHTML = "";
+			document.getElementById("my_dataviz4").innerHTML = "";
 
 			// graph1
 			var margin = { top: 10, right: 30, bottom: 30, left: 60 },
@@ -246,7 +247,7 @@
 						text += "La série ";
 					}
 					tooltip
-						.html(text+d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
+						.html(text + d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
 						.style("top", height + d3.mouse(this)[1] - 100 + "px");
 					tooltip.style("opacity", 1);
@@ -260,7 +261,7 @@
 						text += "La série ";
 					}
 					tooltip
-						.html(text+d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
+						.html(text + d.title_x + " dure " + d.duration + " et est noté " + d.imdb_rating)
 						.style("left", d3.mouse(this)[0] + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
 						.style("top", height + d3.mouse(this)[1] - 100 + "px");
 					tooltip.style("opacity", 1);
